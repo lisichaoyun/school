@@ -1,3 +1,7 @@
-# schoolfront
-毕业设计前端
+# schoolFront
+~~
+npm run dev
+npm run start
+npm run build
+~~
 # school
