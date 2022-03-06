@@ -22,9 +22,9 @@ export default {
   name: 'HelloComing',
   data () {
     return {
-      msg: 'wellcome',
-      username:'lisichaoyun!',
-      Second:30,//倒计时
+      msg: '登录成功欢迎来到此系统',
+      username:this.$route.params.username,
+      Second:10,//倒计时
       percent:100//圆框显示百分比
     }
   },
@@ -34,8 +34,8 @@ export default {
     },
     jump(){
       this.$router.replace({
-        name:'',
-        params:{}
+        name:'Home',
+        params:{username:this.username}
       })
     }
   },
