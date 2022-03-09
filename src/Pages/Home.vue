@@ -5,7 +5,6 @@
       :sm="{span: 4, offset: 0}"
       :md="{span: 3, offset: 0}"
     >
-      <span>{{username}}}</span>
       <el-menu default-active="2"
                class="el-menu-vertical-demo"
                background-color="#545c64"

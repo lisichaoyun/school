@@ -53,17 +53,44 @@
             <el-table-column
               label="操作">
               <template slot-scope="scope">
-                <el-button type="success" disabled v-if="selectState">已选</el-button>
-                <el-button type="primary" @click="centerDialogVisible = true" v-else>选课</el-button>
+                <el-button type="primary" :id="scope.$index" @click="centerDialogVisible = true;showinfo(scope.$index,scope.row)">选课</el-button>
                 <el-dialog
                   title="提示"
                   :visible.sync="centerDialogVisible"
-                  width="30%"
+                  width="80%"
                   center>
+                  <el-table :data="gridData">
+                    <el-table-column
+                      prop="course"
+                      label="课程"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                      prop="credit"
+                      label="学分"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                      prop="category"
+                      label="类别">
+                    </el-table-column>
+                    <el-table-column
+                      prop="teacher"
+                      label="任课老师">
+                    </el-table-column>
+                    <el-table-column
+                      prop="classTime"
+                      label="上课时间">
+                    </el-table-column>
+                    <el-table-column
+                      prop="locations"
+                      label="上课地点">
+                    </el-table-column>
+                  </el-table>
                   <span>您确定要选择此课程吗</span>
                   <span slot="footer" class="dialog-footer">
                     <el-button @click="centerDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="centerDialogVisible = false;confirmSelect(scope.$index, scope.row)">确 定</el-button>
+                    <el-button type="primary" @click="centerDialogVisible = false;confirmSelect(nowrow.index,nowrow.row)">确 定</el-button>
                   </span>
                 </el-dialog>
               </template>
@@ -93,20 +120,42 @@ export default {
       contentsNum:30,//每一页多少条内容,自定义
       infonumber:0,//动态生成
       currentPage3: 1,//默认页码
-      activeName: 'first',
       tableData: [],
       centerDialogVisible: false,
-      selectState:false
+      nowrow:{
+        index:'',
+        row:''
+      },
+      gridData:[]
     };
   },
   methods: {
+    showinfo(index,row){
+      this.nowrow.index=index
+      this.nowrow.row=row
+      this.gridData=[
+        {
+          course:row.course,
+          credit:row.credit,
+          category:row.category,
+          teacher:row.teacher,
+          classTime:row.classTime,
+          locations:row.locations
+        }
+      ]
+    },
     confirmSelect(index, row) {
       this.axios('http://localhost:8080/api/submitCourse',{method:"get",params:{course:row.course}})
       .then(res=>{
           if (res.data.err==1){
             console.log("服务器出问题里")
           }else {
-            this.selectState=true
+            let ch=document.getElementById(String(index))
+            let par=ch.parentElement
+            par.removeChild(ch)
+            let el=document.createElement('span')
+            el.innerText='选课成功'
+            par.appendChild(el)
           }
       }).catch(e=>{
         console.log(e)

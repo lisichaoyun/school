@@ -40,6 +40,7 @@ export default {
     }
   },
   mounted() {
+    document.getElementsByTagName('canvas')[0].style.zIndex='-5'
     let less_times=100/this.Second//每次加多少
     let refreshIntervalId=setInterval(()=>{
       if (this.Second<2){
