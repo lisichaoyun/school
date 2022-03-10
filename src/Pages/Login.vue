@@ -51,10 +51,13 @@ export default {
       this.axios.post('http://localhost:8080/api/login',{username:this.ruleForm.username,password:this.ruleForm.pass}).
       then(res=>{
         if (res.data.err==0){
-          this.$router.push({
+          this.$router.replace({
             name: "HelloComing",
-            params:{username:this.username}
+            params:{
+              username:this.username
+            }
           });
+
         }else {
           console.log(res.data.msg)
         }

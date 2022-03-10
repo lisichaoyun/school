@@ -22,6 +22,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import 'element-ui/lib/theme-chalk/display.css';
 
 Vue.use(VueAxios, axios)
+
 Vue.use(Button)
 Vue.use(Input)
 Vue.use(Form)

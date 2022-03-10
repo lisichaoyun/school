@@ -6,8 +6,7 @@
             v-loading="loading"
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(0, 0, 0, 0.8)"
-            :row-class-name="tableRowClassName">
+            element-loading-background="rgba(0, 0, 0, 0.8)">
             <el-table-column
               prop="course"
               label="课程"
@@ -179,14 +178,6 @@ export default {
       }).finally(()=>{
         this.loading=false
       })
-    },
-    tableRowClassName({row, rowIndex}) {
-      if (this.tableData[rowIndex].condition=='已满') {
-        return 'danger-row';
-      } else{
-        return 'success-row';
-      }
-      return '';
     },
     insertInfo(info){
       this.tableData=[]//清空这页原本内容

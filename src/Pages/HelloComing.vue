@@ -23,9 +23,9 @@ export default {
   data () {
     return {
       msg: '登录成功欢迎来到此系统',
-      username:this.$route.params.username,
       Second:10,//倒计时
-      percent:100//圆框显示百分比
+      percent:100,//圆框显示百分比
+      username:this.$route.params.username
     }
   },
   methods:{
@@ -35,7 +35,9 @@ export default {
     jump(){
       this.$router.replace({
         name:'Home',
-        params:{username:this.username}
+        params:{
+          username:this.username
+        }
       })
     }
   },
@@ -47,6 +49,7 @@ export default {
         this.Second--
         this.percent=0
         clearInterval(refreshIntervalId)
+        this.jump()
       }else {
         this.Second--
         this.percent-=less_times
