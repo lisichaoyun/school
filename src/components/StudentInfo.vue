@@ -33,9 +33,11 @@ export default {
         this.phone=res.data.msg[0].phone
         this.Class=res.data.msg[0].class
         this.studyCode=res.data.msg[0].studyCode
-        this.courseName=(res.data.msg[0].selectedCourse).trim() .split(' ')
-        if (this.courseName.length==0){
-          this.courseNam=['您没有选任何课程']
+        let courseStr=(res.data.msg[0].selectedCourse).trim()
+        if(courseStr==''){
+          this.courseName=['您没有选择任何课程']
+        }else {
+          this.courseName=courseStr.split(' ')
         }
       }else{
         console.log(res.data.msg)

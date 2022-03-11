@@ -26,10 +26,6 @@
               label="任课老师">
             </el-table-column>
             <el-table-column
-              prop="limited"
-              label="限选">
-            </el-table-column>
-            <el-table-column
               prop="selected"
               label="已选">
             </el-table-column>
@@ -157,7 +153,7 @@ export default {
             par.appendChild(el)
           }
       }).catch(e=>{
-        console.log(e)
+        console.log('本地请求出错'+e)
       })
     },
     handleCurrentChange(val) {
@@ -187,7 +183,6 @@ export default {
           credit:info[i].credit,
           category:info[i].category,
           teacher:info[i].teacher,
-          limited:(info[i].limited.split(',')).join(' '),
           selected:info[i].SelectNumer,
           Not:info[i].Capcity-info[i].SelectNumer,
           classTime:info[i].classTime,
