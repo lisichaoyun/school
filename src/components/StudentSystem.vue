@@ -121,7 +121,8 @@ export default {
         index:'',
         row:''
       },
-      gridData:[]
+      gridData:[],
+      offeted:0
     };
   },
   methods: {
@@ -140,7 +141,7 @@ export default {
       ]
     },
     confirmSelect(index, row) {
-      this.axios('http://localhost:8080/api/submitCourse',{method:"get",params:{course:row.course}})
+      this.axios('http://localhost:8080/api/submitCourse',{method:"get",params:{course:row.course,offeted:this.offeted,contentsNum:this.contentsNum}})
       .then(res=>{
           if (res.data.err==1){
             console.log("服务器出问题里")
@@ -158,11 +159,11 @@ export default {
     },
     handleCurrentChange(val) {
       this.loading=true
-      let offeted=0
+      this.offeted=0
       if(val!=1){
-        offeted=(val-1)*this.contentsNum
+        this.offeted=(val-1)*this.contentsNum
       }
-      this.axios.get('http://localhost:8080/api/Selectcourse',{params:{offet:offeted,number:this.contentsNum}})
+      this.axios.get('http://localhost:8080/api/Selectcourse',{params:{offet:this.offeted,number:this.contentsNum}})
       .then(res=>{
         if (res.data.err==1){
           console.log(res.data.msg)

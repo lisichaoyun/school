@@ -5,7 +5,7 @@
       :sm="{span: 4, offset: 0}"
       :md="{span: 4, offset: 0}"
     >
-      <el-menu default-active="2"
+      <el-menu default-active="1"
                class="el-menu-vertical-demo"
                background-color="#545c64"
                text-color="#fff"
@@ -19,7 +19,7 @@
           <span slot="title">首页</span>
         </el-menu-item>
 
-        <el-submenu>
+        <el-submenu index="2">
           <template slot="title">
             <i class="el-icon-s-data hidden-xs-only"></i>
             <span slot="title">学生系统</span>
@@ -30,7 +30,7 @@
           </el-menu-item-group>
         </el-submenu>
 
-        <el-submenu>
+        <el-submenu index="2">
           <template slot="title">
             <i class="el-icon-coffee-cup hidden-xs-only"></i>
             <span slot="title">教师管理系统</span>
