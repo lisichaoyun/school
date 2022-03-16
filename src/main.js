@@ -12,7 +12,7 @@ import {
   Button,
   Col, Descriptions, DescriptionsItem, Dialog,
   Form,
-  FormItem,
+  FormItem, Image,
   Input, Loading, Menu, MenuItem, MenuItemGroup, Pagination,
   Progress,
   Result,
@@ -42,6 +42,7 @@ Vue.use(Descriptions)
 Vue.use(DescriptionsItem)
 Vue.use(Tag)
 Vue.use(Dialog)
+Vue.use(Image)
 Vue.use(Loading.directive)
 
 Vue.config.productionTip = false

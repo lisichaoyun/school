@@ -1,5 +1,5 @@
 <template>
-      <div>
+      <div id="information">
         <div>
           <el-table
             :data="tableData"
@@ -49,51 +49,53 @@
               label="操作">
               <template slot-scope="scope">
                 <el-button type="primary" :id="scope.$index" @click="centerDialogVisible = true;showinfo(scope.$index,scope.row)">选课</el-button>
-                <el-dialog
-                  title="提示"
-                  :visible.sync="centerDialogVisible"
-                  width="80%"
-                  center>
-                  <el-table :data="gridData">
-                    <el-table-column
-                      prop="course"
-                      label="课程"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                      prop="credit"
-                      label="学分"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                      prop="category"
-                      label="类别">
-                    </el-table-column>
-                    <el-table-column
-                      prop="teacher"
-                      label="任课老师">
-                    </el-table-column>
-                    <el-table-column
-                      prop="classTime"
-                      label="上课时间">
-                    </el-table-column>
-                    <el-table-column
-                      prop="locations"
-                      label="上课地点">
-                    </el-table-column>
-                  </el-table>
-                  <span>您确定要选择此课程吗</span>
-                  <span slot="footer" class="dialog-footer">
-                    <el-button @click="centerDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="centerDialogVisible = false;confirmSelect(nowrow.index,nowrow.row)">确 定</el-button>
-                  </span>
-                </el-dialog>
               </template>
             </el-table-column>
           </el-table>
+          <el-dialog
+            title="提示"
+            :visible.sync="centerDialogVisible"
+            width="80%"
+            center
+            :append-to-body="true"
+          >
+            <el-table :data="gridData">
+              <el-table-column
+                prop="course"
+                label="课程"
+              >
+              </el-table-column>
+              <el-table-column
+                prop="credit"
+                label="学分"
+              >
+              </el-table-column>
+              <el-table-column
+                prop="category"
+                label="类别">
+              </el-table-column>
+              <el-table-column
+                prop="teacher"
+                label="任课老师">
+              </el-table-column>
+              <el-table-column
+                prop="classTime"
+                label="上课时间">
+              </el-table-column>
+              <el-table-column
+                prop="locations"
+                label="上课地点">
+              </el-table-column>
+            </el-table>
+            <span>您确定要选择此课程吗</span>
+            <span slot="footer" class="dialog-footer">
+                    <el-button @click="centerDialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="centerDialogVisible = false;confirmSelect(nowrow.index,nowrow.row)">确 定</el-button>
+                  </span>
+          </el-dialog>
         </div>
 
-        <div class="block">
+        <div>
           <el-pagination
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage3"
@@ -101,7 +103,6 @@
             layout="prev, pager, next, jumper,total"
             :total="infonumber">
           </el-pagination>
-
         </div>
        </div>
 </template>
@@ -111,9 +112,10 @@ export default {
   name: "StudentSystem",
   data() {
     return {
+      runOnce:true,
       loading: false,
       contentsNum:30,//每一页多少条内容,自定义
-      infonumber:0,//动态生成
+      infonumber:0,//总共多少条信息默认0
       currentPage3: 1,//默认页码
       tableData: [],
       centerDialogVisible: false,
@@ -122,7 +124,10 @@ export default {
         row:''
       },
       gridData:[],
-      offeted:0
+      offeted:0,
+      msg:[],
+      userSelectedinfo:[],
+      rowNum:0
     };
   },
   methods: {
@@ -135,7 +140,7 @@ export default {
           credit:row.credit,
           category:row.category,
           teacher:row.teacher,
-          classTime:row.classTime,
+          classTime:row.classTime.slice(0,row.classTime.indexOf('T')),
           locations:row.locations
         }
       ]
@@ -186,7 +191,7 @@ export default {
           teacher:info[i].teacher,
           selected:info[i].SelectNumer,
           Not:info[i].Capcity-info[i].SelectNumer,
-          classTime:info[i].classTime,
+          classTime:info[i].classTime.slice(0,info[i].classTime.indexOf('.')),
           locations:info[i].locations,//客户端信息
           condition:(info[i].Capcity-info[i].SelectNumer)>0?'未满':'已满'
         })
@@ -196,19 +201,56 @@ export default {
   beforeMount() {
     this.axios.get('http://localhost:8080/api/Selectcourse',{params:{offet:0,number:this.contentsNum}})
     .then(res=>{
-      this.insertInfo(res.data.msg)
+      this.msg=res.data.msg
+      this.userSelectedinfo=res.data.userinfo
+      this.infonumber=parseInt(res.data.Num)
+      this.rowNum=this.msg.length
+      this.insertInfo(this.msg)
     }).catch(err=>{
       console.log('axiosu程序错误'+err)
     })
-    this.axios.get('http://localhost:8080/api/courseNum').then(res=>{
-        this.infonumber=res.data.msg
-    }).catch(err=>{
-      console.log('axiosu程序错误'+err)
-    })
+  },
+  watch:{
+    tableData:function () {//注意vue2只能检测数组长度变化
+      if (!this.runOnce&&this.tableData.length>=this.rowNum){
+        this.msg.forEach((item,index)=>{
+          this.userSelectedinfo.forEach((course)=>{
+            if (item.course==course){
+              let ch=document.getElementById(String(index))
+              let par=ch.parentElement
+              par.removeChild(ch)
+              let el=document.createElement('span')
+              el.innerText='该课程您已经选了'
+              par.appendChild(el)
+              this.runOnce=false
+            }
+          })
+        })
+      }
+    }
+  },
+  updated() {
+    if (this.runOnce){
+      this.msg.forEach((item,index)=>{
+        this.userSelectedinfo.forEach((course)=>{
+          if (item.course==course){
+            let ch=document.getElementById(String(index))
+            let par=ch.parentElement
+            par.removeChild(ch)
+            let el=document.createElement('span')
+            el.innerText='该课已经被选'
+            par.appendChild(el)
+            this.runOnce=false
+          }
+        })
+      })
+    }
   }
 }
 </script>
 
 <style scoped>
-
+#information>>>.el-table{
+  opacity: 0.9;
+}
 </style>

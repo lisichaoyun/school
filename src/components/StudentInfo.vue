@@ -1,6 +1,6 @@
 <template>
-<div>
-  <el-descriptions title="用户信息">
+<div style="opacity: 0.9">
+  <el-descriptions title="学生信息" style="background-color:rgb(255,255,255)">
     <el-descriptions-item label="姓名">{{realName}}</el-descriptions-item>
     <el-descriptions-item label="手机号">{{phone}}</el-descriptions-item>
     <el-descriptions-item label="班级">{{Class}}</el-descriptions-item>
